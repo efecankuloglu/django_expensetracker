@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+{% load crispy_forms_tags %}
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+        <script>
+    $( function() {
+      $( "#datepicker" ).datepicker({
+        dateFormat: "dd/mm/yy",
+        firstDay: 1,
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+      });
+    } );
+        </script>
+    </head>
+    <body>
+        <form method="post">
+            {% csrf_token %}
+            {{ expense_edit_form|crispy }}
+
+            <button type="submit">Update</button>
+        </form>
+    </body>
+</html>

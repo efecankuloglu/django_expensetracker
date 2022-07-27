@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+{% load crispy_forms_tags %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker({
+        dateFormat: "dd/mm/yy",
+        firstDay: 1,
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+    });
+  } );
+  </script>
+  <style>
+    table {
+      border: none;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      border: 1px solid black;
+      text-align: center;
+    }
+
+    .outside {
+      border: none;
+    }
+  </style>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+        <button type="submit">Save</button>
+    </form>
+
+  {% if qs %}
+    <br>
+    <hr>
+    <br>
+
+  
+    <table>
+      <tr>
+        <th>No</th>
+        <th>Date</th>
+        <th>Location</th> 
+        <th>Bill No</th>
+        <th>Description</th>
+        <th>In/Out</th>
+        <th>Amount</th>
+        <th>Comment</th>
+      </tr>
+      {% for entry in qs %}
+        <tr>
+          <td>{{ entry.id }}</td>
+          <td>{{ entry.date|date:"d/m/Y" }}</td>
+          <td>{{ entry.location }}</td>
+          <td>{{ entry.bill_no }}</td>
+          <td>{{ entry.description }}</td>
+          <td>{{ entry.in_out }}</td>
+          <td>{{ entry.amount }}</td>
+          <td>{{ entry.comment }}</td>
+          <td class="outside"><a href="{% url 'update_expense' entry.pk %}">Update</a> | <a href="{% url 'delete_expense' entry.pk %}">Delete</a></td>
+        </tr>
+        
+      {% endfor %}
+    </table>
+
+
+    <br>
+    <hr>
+
+    {% if total < 0 %}
+      <p> Your credit is {{ total|floatformat:2 }}. </p>
+    {% elif total > 0 %}
+      <p> You have {{ total|floatformat:2 }} advance payment left. </p>
+    {% endif %}
+  {% endif %}
+
+</body>
+</html>
